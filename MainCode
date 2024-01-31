@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for an employee
+struct Employee {
+    int id;
+    char name[50];
+    int age;
+    double salary;
+};
+
+// Function prototypes
+void addEmployee(struct Employee *database, int *numEmployees);
+void displayEmployees(struct Employee *database, int numEmployees);
+void searchEmployee(struct Employee *database, int numEmployees, int searchId);
+
+int main() {
+    struct Employee employeeDatabase[100]; // Assuming a maximum of 100 employees
+    int numEmployees = 0;
+    int choice;
+    
+    do {
+        // Display menu
+        printf("\nEmployee Database Management System\n");
+        printf("1. Add Employee\n");
+        printf("2. Display Employees\n");
+        printf("3. Search Employee\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addEmployee(employeeDatabase, &numEmployees);
+                break;
+            case 2:
+                displayEmployees(employeeDatabase, numEmployees);
+                break;
+            case 3:
+                {
+                    int searchId;
+                    printf("Enter the Employee ID to search: ");
+                    scanf("%d", &searchId);
+                    searchEmployee(employeeDatabase, numEmployees, searchId);
+                }
+                break;
+            case 4:
+                printf("Exiting program. Thank you!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+// Function to add a new employee to the database
+void addEmployee(struct Employee *database, int *numEmployees) {
+    struct Employee newEmployee;
+    
+    printf("Enter Employee ID: ");
+    scanf("%d", &newEmployee.id);
+    
+    printf("Enter Employee Name: ");
+    scanf("%s", newEmployee.name);
+    
+    printf("Enter Employee Age: ");
+    scanf("%d", &newEmployee.age);
+    
+    printf("Enter Employee Salary: ");
+    scanf("%lf", &newEmployee.salary);
+
+    database[*numEmployees] = newEmployee;
+    (*numEmployees)++;
+
+    printf("Employee added successfully!\n");
+}
+
+// Function to display all employees in the database
+void displayEmployees(struct Employee *database, int numEmployees) {
+    if (numEmployees == 0) {
+        printf("No employees in the database.\n");
+    } else {
+        printf("\nEmployee Details:\n");
+        for (int i = 0; i < numEmployees; i++) {
+            printf("ID: %d, Name: %s, Age: %d, Salary: %.2lf\n",
+                   database[i].id, database[i].name, database[i].age, database[i].salary);
+        }
+    }
+}
+
+// Function to search for an employee based on ID
+void searchEmployee(struct Employee *database, int numEmployees, int searchId) {
+    int found = 0;
+    for (int i = 0; i < numEmployees; i++) {
+        if (database[i].id == searchId) {
+            printf("Employee found:\n");
+            printf("ID: %d, Name: %s, Age: %d, Salary: %.2lf\n",
+                   database[i].id, database[i].name, database[i].age, database[i].salary);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Employee with ID %d not found.\n", searchId);
+    }
+}
